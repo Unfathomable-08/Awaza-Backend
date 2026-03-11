@@ -7,6 +7,6 @@ router.post('/:id/follow', protect, followUser);
 router.post('/:id/unfollow', protect, unfollowUser);
 router.get('/:id/followers', protect, getFollowers);
 router.get('/:id/following', protect, getFollowing);
-router.get('/:id/is-following', protect, isFollowing);
+router.get('/:username/is-following', protect, isFollowing);
 
 module.exports = router;

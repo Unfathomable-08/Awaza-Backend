@@ -83,7 +83,7 @@ const getFollowing = async (req, res) => {
 // Check if current user is following a specific user
 const isFollowing = async (req, res) => {
   try {
-    const userToCheck = await User.findById(req.params.id);
+    const userToCheck = await User.findOne({username: req.params.username});
     if (!userToCheck) {
       return res.status(404).json({ message: 'User not found' });
     }
