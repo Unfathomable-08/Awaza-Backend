@@ -7,6 +7,7 @@ const postRoutes = require('./routes/post');
 const actionRoutes = require('./routes/actions');
 const inboxRoutes = require('./routes/inbox');
 const accountSettingRoutes = require('./routes/accountSetting');
+const followRoutes = require('./routes/follow');
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/actions', actionRoutes);
 app.use('/api/inbox', inboxRoutes);
 app.use('/api/account', accountSettingRoutes);
+app.use('/api/follow', followRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
