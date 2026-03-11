@@ -24,35 +24,44 @@ const createPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  // with params
-  const {
-    page = 1,
-    limit = 10,
-    sort = "createdAt",
-    order = "desc",
-  } = req.query;
 
   try {
-    const posts = await Post.find({ user: req.user.id })
-      .sort({ [sort]: order === "desc" ? -1 : 1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
+    const limit = parseInt(req.query.limit) || 20;
+    const username = req.query.username;
+    const cursor = req.query.cursor; // MongoDB ObjectId as string
+
+    let query = {  };
+
+    if (username) {
+      query.user = await User.findOne({ username }).select("_id");
+    }
+
+    if (cursor) {
+      query._id = { $lt: cursor }; // Use _id for cursor
+    }
+
+    const posts = await Post.find(query)
+      .sort({ _id: -1 })
+      .limit(limit + 1)
       .populate("user", "username email")
-      .exec();
+      .lean();
 
-    // total posts count
-    const totalPosts = await Post.countDocuments({ user: req.user.id });
+    const hasMore = posts.length > limit;
+    const slicedPosts = hasMore ? posts.slice(0, limit) : posts;
 
-    res.status(200).json({
-      posts,
+    const nextCursor = hasMore
+      ? slicedPosts[slicedPosts.length - 1]._id.toString()
+      : null;
+
+    const totalPosts = await Post.countDocuments(query);
+
+    res.json({
+      posts: slicedPosts,
+      nextCursor,
+      hasMore,
+      totalPosts,
       success: true,
-      message: "Posts fetched successfully",
-      pagination: {
-        count: posts.length,
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: Math.ceil(totalPosts / limit),
-      },
+      message: "Posts fetched successfully"
     });
     
   } catch (error) {
