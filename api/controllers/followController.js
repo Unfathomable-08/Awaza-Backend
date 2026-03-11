@@ -80,9 +80,26 @@ const getFollowing = async (req, res) => {
   }
 };
 
+// Check if current user is following a specific user
+const isFollowing = async (req, res) => {
+  try {
+    const userToCheck = await User.findById(req.params.id);
+    if (!userToCheck) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const following = req.user.following.includes(userToCheck._id);
+
+    res.json({ isFollowing: following });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
   followUser,
   unfollowUser,
   getFollowers,
-  getFollowing
+  getFollowing,
+  isFollowing
 };
