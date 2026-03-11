@@ -8,6 +8,7 @@ const getProfile = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
     const profileData = {
+      id: user._id,
       avatar: user.avatar,
       followersCount: user.followers.length,
       followingCount: user.following.length,
