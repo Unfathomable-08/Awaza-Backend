@@ -87,6 +87,11 @@ router.post('/send', protect, async (req, res) => {
         title,
         body: body || '',
       },
+      webpush: {
+        notification: {
+          icon: data?.icon || 'https://awaza-social.vercel.app/pwa-192x192.png',
+        }
+      },
       data: data || {},
       tokens: tokens,
     };
