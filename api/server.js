@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const admin = require('firebase-admin');
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/post');
 const actionRoutes = require('./routes/actions');
@@ -9,7 +10,7 @@ const inboxRoutes = require('./routes/inbox');
 const accountSettingRoutes = require('./routes/accountSetting');
 const followRoutes = require('./routes/follow');
 const notificationRoutes = require('./routes/notifications');
-const admin = require('firebase-admin');
+const otherNotificationRoutes = require('./routes/otherNotification');
 
 const app = express();
 
@@ -62,6 +63,7 @@ app.use('/api/inbox', inboxRoutes);
 app.use('/api/account', accountSettingRoutes);
 app.use('/api/follow', followRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/other-notifications', otherNotificationRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
