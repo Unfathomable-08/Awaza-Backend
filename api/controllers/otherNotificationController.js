@@ -19,7 +19,7 @@ const getNotifications = async (req, res) => {
             notifications = await Notification
                 .find({ userId, read: false })
                 .sort({ createdAt: -1 })
-                .populate('user', 'username avatar name')
+                .populate('userId', 'username avatar name')
                 .populate('postId', 'title content')
                 .populate('commentedBy', 'username avatar name')
                 .populate('likedBy', 'username avatar name')
@@ -31,7 +31,7 @@ const getNotifications = async (req, res) => {
                 .find({ userId })
                 .sort({ createdAt: -1 })
                 .limit(25)
-                .populate('user', 'username avatar name')
+                .populate('userId', 'username avatar name')
                 .populate('postId', 'title content')
                 .populate('commentedBy', 'username avatar name')
                 .populate('likedBy', 'username avatar name')
